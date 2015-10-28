@@ -10,18 +10,24 @@ module Napakalaki
   @BaseDatosMonstruos = Array.new
   @tesorosVisibles = Array.new
   @tesorosOcultos = Array.new
+  @tesorosVisibles2 = Array.new
+  @tesorosOcultos2 = Array.new
   
   @tesorosVisibles = "ARMOR"
   @tesorosOcultos = "ONEHAND"
+  @tesorosVisibles2 = ""
+  @tesorosOcultos2 = ""
   malrollo1 = BadConsequence.newLevelNumberOfTreasures("Pierdes la vida",2,@tesorosVisibles,@tesorosOcultos)
   malrollo2 = BadConsequence.newLevelNumberOfTreasures("Pierdes la pata",0,@tesorosVisibles,@tesorosOcultos)
+  malrollo3 = BadConsequence.newLevelNumberOfTreasures("Pierdes la pata",6,@tesorosVisibles2,@tesorosOcultos2)
   precio1 = Prize.new(3,2)
   precio2 = Prize.new(1,7)
-  monstruo1 = Monster.new("YoMismo",7,precio1,malrollo2)
-  monstruo2 = Monster.new("YoMismo",2,precio1,malrollo2)
-  monstruo3 = Monster.new("YoMismo",3,precio1,malrollo2)
-  monstruo4 = Monster.new("YoMismo",4,precio2,malrollo1)
-  monstruo5 = Monster.new("YoMismo",10,precio2,malrollo1)
+  precio3 = Prize.new(1,0)
+  monstruo1 = Monster.new("YoMismo",7,malrollo2,precio1)
+  monstruo2 = Monster.new("YoMismo",2,malrollo2,precio1)
+  monstruo3 = Monster.new("YoMismo",3,malrollo3,precio3)
+  monstruo4 = Monster.new("YoMismo",4,malrollo1,precio2)
+  monstruo5 = Monster.new("YoMismo",10,malrollo1,precio2)
   
   @BaseDatosMonstruos.push(monstruo1)
   @BaseDatosMonstruos.push(monstruo2)
@@ -39,34 +45,36 @@ module Napakalaki
 
   case op
   when "1"
-    for mimonstruo in @BaseDatosMonstruos
-      if (mimonstruo.combatLevel.to_i() >= 10)
-        puts "#{mimonstruo.to_s}\n"
+    for mimonstruo0 in @BaseDatosMonstruos
+      if (mimonstruo0.combatLevel.to_i() >= 10)
+        puts "#{mimonstruo0.to_s}\n"
       end
     end
     
   when "2"
-    for mimonstruo in @BaseDatosMonstruos
-      if (mimonstruo.badConsequence.levels != 0)
-        puts "#{mimonstruo.to_s}\n"
+    for mimonstruo1 in @BaseDatosMonstruos
+      if (mimonstruo1.badConsequence.levels != 0)
+        puts "#{mimonstruo1.to_s}\n"
       end
     end
+    
   when "3"
-    for mimonstruo in @BaseDatosMonstruos
-      if (mimonstruo.getLevelsGained.to_i > 1)
-        puts "#{mimonstruo.to_s}\n"
+    for mimonstruo2 in @BaseDatosMonstruos
+      if (mimonstruo2.getLevelsGained.to_i > 1)
+        puts "#{mimonstruo2.to_s}\n"
       end
     end
+    
   when "4"
-    for mimonstruo in @BaseDatosMonstruos
-      mimonstruo.to_s
-      if (mimonstruo.badConsequence.specificVisibleTreasures.empty?)
-        puts "#{mimonstruo.to_s}\n"
+    for mimonstruo3 in @BaseDatosMonstruos
+      if (mimonstruo3.badConsequence.specificVisibleTreasures != "")
+        puts "#{mimonstruo3.to_s}\n"
       end
     end
   else
     puts "introduzca un numero valido\n"
   end
+  
 #  @BaseDatosMonstruos.each do |mimonstruo|
 #    puts "#{mimonstruo.to_s}\n"
 #  end
