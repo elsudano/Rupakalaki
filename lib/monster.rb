@@ -17,7 +17,7 @@ module Napakalaki
     end
 
     def getLevelsGained()
-       @prize.level
+      @prize.level
     end
 
     def getTreasuresGained()
@@ -25,7 +25,7 @@ module Napakalaki
     end
 
     def kills()
-      return @badConsequence.myBadConsequenceIsDeath()
+      @badConsequence.myBadConsequenceIsDeath()
     end
 
     def to_s
