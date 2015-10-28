@@ -2,11 +2,13 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 
-class TreasureKind
-    ARMOR = "ARMOR"
-    ONEHAND = "ONEHAND"
-    BOTHHAND = "BOTHHAND"
-    HELMET = "HELMET"
-    SHOE = "SHOE"
-    NECKLACE = "NECKLACE"
+module Napakalaki
+  class TreasureKind
+      ARMOR = "ARMOR"
+      ONEHAND = "ONEHAND"
+      BOTHHAND = "BOTHHAND"
+      HELMET = "HELMET"
+      SHOE = "SHOE"
+      NECKLACE = "NECKLACE"
+  end
 end
