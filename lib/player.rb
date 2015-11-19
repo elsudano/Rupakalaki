@@ -1,8 +1,8 @@
 module Napakalaki
 
   class Player
-    attr_reader :dead, :name, :level, :pendingBadStuff, :visibleTreasures, :hiddenTreasures
-
+    attr_reader :dead, :name, :level, :pendingBadConsequence, :visibleTreasures, :hiddenTreasures,:canISteal
+    attr_rwiter :enemy ,:level,:pendingBadConsequence
     @@MIN_LEVEL=1
     @@MAX_LEVEL=10
     @@MAX_HIDDEN_TREASURES=4
@@ -11,9 +11,15 @@ module Napakalaki
       @dead = d
       @name = n
       @level = l
-      @pendingBadStuff = pbs
+      @pendingBadConsequence = pbs
       @visibleTreasures = Array.new(vt)
       @hiddenTreasures = Array.new(ht)
+      @enemy
+      @canISteal=true
+    end
+    def Player.newPlayer(p)
+      new(p.dead,p.name,p.level,p.pendingBadConsequence,p.visibleTreasures,p.hiddenTreasures)
+      
     end
 
     #private_class_method :bringToLive, :incrementLevels, :decrementLevels, :setPendingBadStuff, :die, :discardNecklaceIfVisible, :dielfNoTreasures, :computeGoldCoinsValue, :canIBuyLevels 
@@ -21,7 +27,7 @@ module Napakalaki
     def player(name)
       self.name = name
     end
-
+    
     def getcombatlevel()
       @bonus = 0
       @haveNecklace = false
@@ -61,12 +67,8 @@ module Napakalaki
       end
     end
 
-    def setpendingbadstuff(b)
-      @pendingBadStuff = b
-    end
-
     def setlevel(l)
-      @level = l
+        @level = l
       if(level<MIN_LEVEL)
         @level = MIN_LEVEL
       end
@@ -163,11 +165,15 @@ module Napakalaki
       return combatResult   
     end
 
-    def applybadstuff(bad)
+    def applybadConsequence(bad)
       nLevels = bad.level
       self.decrementLevels(nLevels)
-      @pendingBadStuff = bad.adjustToFitTreasureList(visibleTreasure, hiddenTreasures)
-      self.setPendingBadStuff(pendingBadStuff)
+      pendingBad = bad.adjustToFitTreasureList(visibleTreasure, hiddenTreasures)
+      setPendingBadConsequence(pendingBad)
+      
+    end
+    def setPendingBadConsequence(b)
+    @pendingBadConsequence=b;
     end
 
     def maketreasurevisible(t)
@@ -180,32 +186,40 @@ module Napakalaki
 
     def canmaketreasurevisible(t)
 
-      for tre in @visibleTreasures
-        types.add(t.type)
-      end        
-
-      if (t.type != TreasureKind.ONEHAND && t.type != TreasureKind.BOTHHAND)
-        can = !types.contains(t.type)
-      elsif (t.type == TreasureKind.BOTHHAND)
-        can = !types.contains(TreasureKind.BOTHHAND) && !types.contains(TreasureKind.ONEHAND)
-      else
-        can = !types.contains(TreasureKind.BOTHHAND) && 
-          (types.indexOf(TreasureKind.ONEHAND) == types.lastIndexOf(TreasureKind.ONEHAND));
+       result = false
+    case t.type
+      when TreasureKind::ONEHAND
+        if isTreasureKind(TreasureKind::BOTHHAND) then
+          result = false
+        else
+          i = 0
+          @visibleTreasures.each do |tv|
+            if tv.type == TreasureKind::ONEHAND then
+              i += 1
+            end
+          end
+          if i == 2 then
+            result = false
+          else
+            result = true
+          end
+        end
+      else  
+        result = !isTreasureKind(t.type)
       end
-
-      return can;
+      return result
     end
 
     def discardvisibletreasure(t)
-      if(self.pendingBadStuff!=null && !self.pendingBadStuff.isEmpy())
-        self.pendingBadStuff.substractVisibleTreasure(t)
+      if(self.pendingBadConsequence!=null && !self.pendingConsequence.isEmpy())
+        self.pendingBadConsequence.substractVisibleTreasure(t)
         this.dielfNoTreasures()
       end
     end
 
     def discardhiddentreasure(t)
-      if(self.pendingBadStuff!=null && !self.pendingBadStuff.isEmpy())
-        self.pendingBadStuff.substractHiddenTreasure(t)
+      if(self.pendingBadConsequence!=null && !self.pendingBadConsequence.isEmpy())
+        self.pendingBadConsequence.substractHiddenTreasure(t)
         this.dielfNoTreasures()
       end    
     end
@@ -234,7 +248,7 @@ module Napakalaki
     end
 
     def validstate()
-      return @pendingBadStuff.isEmpy() == true && @hiddenTreasures.size() < 4    
+      return @pendingBadConsequence.isEmpy() == true && @hiddenTreasures.size() < 4    
     end
 
     def hasvisibletreasures()
@@ -257,11 +271,13 @@ module Napakalaki
         @hiddenTreasures.add(treasure)
       end
     end
+    
+ 
 
     def to_s
       "Name: #{@name} \n Level: #{@level}
       \n Visible Treasures: #{@visibleTreasures}\n Hidden Treasures: #{@hiddenTreasures}
-      \n Pending BadStuff: #{@pendingBadStuff}
+      \n Pending BadStuff: #{@pendingBadConsequence}
       \n Combat Level: " + combatLevel
       "\n Death: #{@dead}"
     end
