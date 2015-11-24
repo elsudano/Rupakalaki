@@ -2,96 +2,80 @@ module Napakalaki
 
   class Player
     attr_reader :dead, :name, :level, :pendingBadConsequence, :visibleTreasures, :hiddenTreasures,:canISteal
-    attr_rwiter :enemy ,:level,:pendingBadConsequence
+    attr_writer :enemy ,:level,:pendingBadConsequence
     @@MIN_LEVEL=1
     @@MAX_LEVEL=10
     @@MAX_HIDDEN_TREASURES=4
 
-    def initialize(d, n, l, pbs, vt=Array.new, ht=Array.new)
-      @dead = d
-      @name = n
+    def initialize(name)
+      @dead = true
+      @name = name
       @level = l
-      @pendingBadConsequence = pbs
-      @visibleTreasures = Array.new(vt)
-      @hiddenTreasures = Array.new(ht)
+      @pendingBadConsequence = BadConsequence.new()
+      @visibleTreasures = Array.new()
+      @hiddenTreasures = Array.new()
       @enemy
       @canISteal=true
     end
+    
     def Player.newPlayer(p)
       new(p.dead,p.name,p.level,p.pendingBadConsequence,p.visibleTreasures,p.hiddenTreasures)
       
     end
-
-    #private_class_method :bringToLive, :incrementLevels, :decrementLevels, :setPendingBadStuff, :die, :discardNecklaceIfVisible, :dielfNoTreasures, :computeGoldCoinsValue, :canIBuyLevels 
-
-    def player(name)
-      self.name = name
-    end
     
-    def getcombatlevel()
-      @bonus = 0
-      @haveNecklace = false
-      for t in @visibleTreasures 
-        if (t.type==TreasureKind.NECKLACE)
-          haveNecklace = true
-        end
-      end
-      if (haveNecklace)
-        for t in  @visibleTreasures
-          bonus += t.maxBonus
-        end
-      else
-        for t in @visibleTreasures
-          bonus += t.minBonus 
-        end
-      end
-      return bonus + level
-    end
+    def getCombatLevel() 
+      lvl = @level 
+      hasNecklace = false 
+      @visibleTreasures.each do |t| 
+        if t.type == TreasureKind::NECKLACE then 
+          hasNecklace = true 
+          break 
+        end 
+      end 
+      @visibleTreasures.each do |t| 
+        if hasNecklace then 
+          lvl += t.maxBonus 
+        else  
+          lvl += t.minBonus  
+        end 
+      end 
+      return lvl 
+    end 
 
-    def isdead()
+    def isDead()
       return @dead == true
     end
 
-    def bringtolife()
+    def bringToLife()
       @dead = false
     end
 
-    def incrementlevels(l)
-      @level += l
+    def incrementLevels(i)
+      @level += i
     end
 
-    def decrementlevels(l)
-      @level -= l
+    def decrementLevels(i)
+      @level -= i
       if (@level < MIN_LEVEL)
         @level = MIN_LEVEL
       end
     end
 
-    def setlevel(l)
-        @level = l
-      if(level<MIN_LEVEL)
-        @level = MIN_LEVEL
-      end
-    end
-
     def die()
-      self.setLevel(1)
-      dealer = CardDealer.instance
-      for treasure in @visibleTreasures
-        dealer.giveTreasureBack(treasure)
+      @level = 1 
+      dealer = CardDealer.instance 
+      @visibleTreasures.each do |t|
+        dealer.giveTreasuresBack(t) 
       end
-
-      @visibleTreasures.clear
-
-      for treasure in @hiddenTreasures
-        dealer.giveTreasureBack(treasure)
+      @visibleTreasures.clear 
+      @hiddenTreasures.each do |t|
+        dealer.giveTreasuresBack(t) 
       end
-
-      @hiddenTreasures.clear
-      self.dielfNoTreasures()
+      @hiddenTreasures.clear 
+      dieIfNoTreasures() 
     end
 
-    def discardnecklaceifvisible()
+    def discardNecklaceIfVisible()
       dealer = CardDealer.instance
       for t in @visibleTreasures
         if (t.type == TreasureKind.NECKLACE)
@@ -101,13 +85,11 @@ module Napakalaki
       end
     end
 
-    def dielfnotreasures()
-
+    def dieIfNoTreasures()
       @dead = @visibleTreasures.isEmpty() && @hiddenTreasures.isEmpty()
-
     end
 
-    def computegoldcoinsvalue(t=Array.new)
+    def computeGoldCoinsValue(t=Array.new)
       goldCoins = 0
       for tre in t
         goldCoins += tre.goldCoins
@@ -115,22 +97,22 @@ module Napakalaki
       return goldCoins/1000
     end
 
-    def canibuylevels(l)
+    def canIBuyLevels(l)
       return @level + l < MAX_LEVEL
     end
 
-    def applyPrize(p)
-      nLevels = currentMonster.getLevelsGained()
-      self.incrementLevels(nLevels)
-      nTreasures = currentMonster.getTreasuresGained()
-
-      if (nTreasures>0)
-        dealer = CardDealer.instace
-        for treasure in @visibleTreasures
-          treasure = dealer.nextTreasure()
-          @hiddenTreasures.push(treasure)
-        end
-      end
+    def applyPrize(m)
+      #      nLevels = currentMonster.getLevelsGained()
+      #      self.incrementLevels(nLevels)
+      #      nTreasures = currentMonster.getTreasuresGained()
+      #
+      #      if (nTreasures>0)
+      #        dealer = CardDealer.instace
+      #        for treasure in @visibleTreasures
+      #          treasure = dealer.nextTreasure()
+      #          @hiddenTreasures.push(treasure)
+      #        end
+      #      end
     end
 
     def combat (m)
@@ -165,18 +147,18 @@ module Napakalaki
       return combatResult   
     end
 
-    def applybadConsequence(bad)
-      nLevels = bad.level
+    def applyBadConsequence(m)
+      nLevels = m.level
       self.decrementLevels(nLevels)
-      pendingBad = bad.adjustToFitTreasureList(visibleTreasure, hiddenTreasures)
+      pendingBad = m.adjustToFitTreasureList(visibleTreasure, hiddenTreasures)
       setPendingBadConsequence(pendingBad)
-      
     end
+    
     def setPendingBadConsequence(b)
-    @pendingBadConsequence=b;
+      @pendingBadConsequence=b;
     end
 
-    def maketreasurevisible(t)
+    def makeTreasureVisible(t)
       canI = self.canMakeTreasureVisible(t)
       if canI
         @visibleTreasures.push(t)
@@ -184,10 +166,9 @@ module Napakalaki
       end
     end
 
-    def canmaketreasurevisible(t)
-
-       result = false
-    case t.type
+    def canMakeTreasureVisible(t)
+      result = false
+      case t.type
       when TreasureKind::ONEHAND
         if isTreasureKind(TreasureKind::BOTHHAND) then
           result = false
@@ -210,14 +191,18 @@ module Napakalaki
       return result
     end
 
-    def discardvisibletreasure(t)
+    def howManyTreasureVisible(tKind)
+      #@todo
+    end
+    
+    def discardVisibleTreasure(t)
       if(self.pendingBadConsequence!=null && !self.pendingConsequence.isEmpy())
         self.pendingBadConsequence.substractVisibleTreasure(t)
         this.dielfNoTreasures()
       end
     end
 
-    def discardhiddentreasure(t)
+    def discardhHddenTreasure(t)
       if(self.pendingBadConsequence!=null && !self.pendingBadConsequence.isEmpy())
         self.pendingBadConsequence.substractHiddenTreasure(t)
         this.dielfNoTreasures()
@@ -247,15 +232,15 @@ module Napakalaki
       return canI    
     end
 
-    def validstate()
+    def validState()
       return @pendingBadConsequence.isEmpy() == true && @hiddenTreasures.size() < 4    
     end
 
-    def hasvisibletreasures()
+    def hasVisibleTreasures()
       return @visibleTreasures.isEmpty() == false    
     end
 
-    def inittreasures()
+    def initTreasures()
       dealer = CardDealer.instance
       dice = Dice.instace
       self.bringToLife()
@@ -272,8 +257,30 @@ module Napakalaki
       end
     end
     
- 
-
+    def stealTreasure()
+      #todo
+    end
+    
+    def setEnemy(enemy)
+      #tdo
+    end
+    
+    def giveMeATreasure()
+      #todo
+    end
+    
+    def canYouGiveMeATreasure()
+      #todo
+    end
+    
+    def haveStolen()
+      #todo
+    end
+    
+    def discardAllTreasure()
+      #todo
+    end
+    
     def to_s
       "Name: #{@name} \n Level: #{@level}
       \n Visible Treasures: #{@visibleTreasures}\n Hidden Treasures: #{@hiddenTreasures}
@@ -281,5 +288,8 @@ module Napakalaki
       \n Combat Level: " + combatLevel
       "\n Death: #{@dead}"
     end
+    
+    private :bringToLive, :getCombatLevel, :incrementLevels, :decrementLevels, :setPendingBadConsequence, :applyPrize, :applyBadConsequence, :canMakeTreasureVisible, :howManyTreasureVisible, :dieIfNoTreasures, :giveMeATreasure, :canYouGiveMeATreasure, :haveStolen, :die, :discardNecklaceIfVisible, :dielfNoTreasures, :computeGoldCoinsValue, :canIBuyLevels 
+    
   end
 end

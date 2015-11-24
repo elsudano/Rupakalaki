@@ -6,6 +6,7 @@ module Napakalaki
   require_relative 'monster'
   require_relative 'prize'
   require_relative 'bad_consequence'
+  require_relative 'card_dealer'
   
   @BaseDatosMonstruos = Array.new
   @tesorosVisibles = Array.new
@@ -13,10 +14,15 @@ module Napakalaki
   @tesorosVisibles2 = Array.new
   @tesorosOcultos2 = Array.new
   
+  @myCardDealer = CardDealer.new
+  puts "Card: " + @myCard_Dealer.nextMonster()
+  
+  
   @tesorosVisibles = "ARMOR"
   @tesorosOcultos = "ONEHAND"
   @tesorosVisibles2 = ""
   @tesorosOcultos2 = ""
+  
   malrollo1 = BadConsequence.newLevelNumberOfTreasures("Pierdes la vida",2,@tesorosVisibles,@tesorosOcultos)
   malrollo2 = BadConsequence.newLevelNumberOfTreasures("Pierdes la pata",0,@tesorosVisibles,@tesorosOcultos)
   malrollo3 = BadConsequence.newLevelNumberOfTreasures("Pierdes la pata",6,@tesorosVisibles2,@tesorosOcultos2)

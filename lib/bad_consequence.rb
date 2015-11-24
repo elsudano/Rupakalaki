@@ -7,31 +7,34 @@ module Napakalaki
 
   class BadConsequence
 
-    attr_reader :text, :levels, :nVisibleTreasures, :nHiddenTreasures, :death, :specificVisibleTreasures, :specificHiddenTreasures  
-
-    def initialize(text, levels=0, nVisibleTreasures=0, nHiddenTreasures=0, 
-        specificVisibleTreasures=Array.new, specificHiddenTreasures=Array.new,
+    attr_reader :text, :levels, :nVisibleTreasures, :nHiddenTreasures, :death, :specificVisibleTreasures, :specificHiddenTreasures
+    
+    @@MAXTREASURES=10
+    
+    def initialize(aText, someLevels=0, someVisibleTreasures=0, someHiddenTreasures=0, 
+        someSpecificVisibleTreasures=Array.new, someSpecificHiddenTreasures=Array.new,
         death=false)
 
-      @text=text
-      @levels=levels
-      @nVisibleTreasures=nVisibleTreasures
-      @nHiddenTreasures=nHiddenTreasures
-      @specificVisibleTreasures=specificVisibleTreasures
-      @specificHiddenTreasures=specificHiddenTreasures
+      @text=aText
+      @levels=someLevels
+      @nVisibleTreasures=someVisibleTreasures
+      @nHiddenTreasures=someHiddenTreasures
+      @specificVisibleTreasures=someSpecificVisibleTreasures
+      @specificHiddenTreasures= someSpecificHiddenTreasures
       @death=death
     end
-    def BadConsequence.newLevelNumberOfTreasures (t, l,nVisible, nHidden)
-      new(t, l, nVisible, nHidden,Array.new,Array.new,false)
+    def BadConsequence.newLevelNumberOfTreasures (aText, someLevels=0, someVisibleTreasures=0, someHiddenTreasures=0)
+      new(aText, someLevels, someVisibleTreasures, someHiddenTreasures,Array.new,Array.new,false)
     end
 
-    def BadConsequence.newLevelSpecificTreasures(t, l, v, h)
-      new(t, l, 0,0,v,h,false)
+    def BadConsequence.newLevelSpecificTreasures(aText, someLevels=0, someSpecificVisibleTreasures, someSpecificHiddenTreasures)
+      new(aText, someLevels, 0,0,someSpecificVisibleTreasures,someSpecificHiddenTreasures,false)
     end
 
-    def BadConsequence.newDeath (t,death)
-      new(t,0,0,0,Array.new,Array.new,death)
+    def BadConsequence.newDeath (aText)
+      new(aText,0,0,0,Array.new,Array.new,false)
     end
+    
     def isEmpty()
       empty = false
       if @levels == 0 && @death == false && @nHiddenTreasures == 0 && @nVisibleTreasures == 0  && @specificHiddenTreasures.empty? && @specificVisibleTreasures.empty? then
@@ -90,8 +93,8 @@ module Napakalaki
     def to_s
       "Texto: #{@text}, Niveles: #{@levels}, Numero de tesoros Visibles: #{@nVisibleTreasures}, Numero de tesoros Ocultos: #{@nHiddenTreasures}, Muerte: #{@death}, Tesoros Ocultos: #{@specificHiddenTreasures}, Tesoros Visibles: #{@specificVisibleTreasures}."
     end
-
+    #private :text, :levels, :nVisibleTreasures, :nHiddenTreasures, :death, :specificHiddenTreasures, :specificVisibleTreasures
     private_class_method:new
-
+ 
   end
 end
