@@ -3,7 +3,7 @@
 # and open the template in the editor.
 module Napakalaki
   class CombatResult
-    WINANDWINGAME = :WINGAME
+    WINGAME = :WINGAME
     WIN = :WIN
     LOSE = :LOSE
   end

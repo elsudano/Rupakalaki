@@ -25,21 +25,24 @@ module Napakalaki
     
     def getCombatLevel() 
       lvl = @level 
-      hasNecklace = false 
+      #hasNecklace = false 
+#      @visibleTreasures.each do |t| 
+#        if t.type == TreasureKind::NECKLACE then 
+#          hasNecklace = true 
+#          break 
+#        end 
+#      end 
+#      @visibleTreasures.each do |t| 
+#        if hasNecklace then 
+#          lvl += t.maxBonus 
+#        else  
+#          lvl += t.minBonus  
+#        end 
+#      end 
       @visibleTreasures.each do |t| 
-        if t.type == TreasureKind::NECKLACE then 
-          hasNecklace = true 
-          break 
-        end 
+        lvl+=t.minBonus+t.maxBonus
       end 
-      @visibleTreasures.each do |t| 
-        if hasNecklace then 
-          lvl += t.maxBonus 
-        else  
-          lvl += t.minBonus  
-        end 
-      end 
-      return lvl 
+      return lvl
     end 
 
     def isDead()
@@ -52,6 +55,9 @@ module Napakalaki
 
     def incrementLevels(i)
       @level += i
+      if(@level>MAX_LEVEL)
+        @level=MAX_LEVEL
+      end
     end
 
     def decrementLevels(i)
@@ -192,7 +198,12 @@ module Napakalaki
     end
 
     def howManyTreasureVisible(tKind)
-      #@todo
+      for t in @visibleTreasures
+       if(t.type==tKind)
+         i+=1 
+       end
+      end
+      return i
     end
     
     def discardVisibleTreasure(t)
@@ -262,7 +273,7 @@ module Napakalaki
     end
     
     def setEnemy(enemy)
-      #tdo
+      @enemy=enemy
     end
     
     def giveMeATreasure()
@@ -270,11 +281,11 @@ module Napakalaki
     end
     
     def canYouGiveMeATreasure()
-      #todo
+      return (!@visibleTreasures.isEmpty() ||  !@hiddenTreasures.isEmpty() )
     end
     
     def haveStolen()
-      #todo
+      @canISteal=false
     end
     
     def discardAllTreasure()

@@ -6,19 +6,9 @@ require 'singleton'
   
 class Dice
   include Singleton
-  
-  attr_accessor :instance
-  
-  @@instance = new Dice
-  
-  def initialize 
-    #todo
-  end 
 
   def nextNumber()
     return 1 + rand(6)
   end
-  
-  private_class_method:new
   
 end

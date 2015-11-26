@@ -17,11 +17,11 @@ module Napakalaki
     end
 
     def getLevelsGained()
-      @prize.level
+     return  @prize.level
     end
 
     def getTreasuresGained()
-      @prize.treasures
+      return @prize.treasures
     end
 
     def kills()
