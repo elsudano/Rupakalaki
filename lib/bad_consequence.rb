@@ -89,6 +89,27 @@ module Napakalaki
     def myBadConsequenceIsDeath()
       return @death
     end
+      
+    def substractVisibleTreasure(t)
+      
+     if(@specificVisibleTreasures.include?(t.getType))  
+        @specificVisibleTreasures = @specificVisibleTreasures - [t.getType] 
+        @nVisibleTreasures = @nVisibleTreasures - 1 
+      elsif(@specificVisibleTreasures.empty? and @nVisibleTreasures > 0) 
+        @nVisibleTreasures = @nVisibleTreasures - 1 
+      end  
+    end
+  
+  
+  def substractHiddenTreasure(t)
+    if(@specificHiddenTreasures.include?(t.getType)) 
+        @specificHiddenTreasures = @specificHiddenTreasures - [t.getType] 
+        @nHiddenTreasures = @nHiddenTreasures - 1  
+    elsif(@specificHiddenTreasures.empty? and @nHiddenTreasures > 0) 
+        @nHiddenTreasures = @nHiddenTreasures - 1  
+    end 
+
+  end
 
     def to_s
       "Texto: #{@text}, Niveles: #{@levels}, Numero de tesoros Visibles: #{@nVisibleTreasures}, Numero de tesoros Ocultos: #{@nHiddenTreasures}, Muerte: #{@death}, Tesoros Ocultos: #{@specificHiddenTreasures}, Tesoros Visibles: #{@specificVisibleTreasures}."

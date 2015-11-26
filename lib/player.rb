@@ -108,17 +108,17 @@ module Napakalaki
     end
 
     def applyPrize(m)
-      #      nLevels = currentMonster.getLevelsGained()
-      #      self.incrementLevels(nLevels)
-      #      nTreasures = currentMonster.getTreasuresGained()
-      #
-      #      if (nTreasures>0)
-      #        dealer = CardDealer.instace
-      #        for treasure in @visibleTreasures
-      #          treasure = dealer.nextTreasure()
-      #          @hiddenTreasures.push(treasure)
-      #        end
-      #      end
+          nLevels = currentMonster.getLevelsGained()
+          incrementLevels(nLevels)
+          nTreasures = currentMonster.getTreasuresGained()
+      
+           if (nTreasures>0)
+             dealer = CardDealer.instace
+              for i in 1..nTreasures
+               treasure = dealer.nextTreasure()
+                @hiddenTreasures.push(treasure)
+              end
+            end
     end
 
     def combat (m)
@@ -156,7 +156,7 @@ module Napakalaki
     def applyBadConsequence(m)
       nLevels = m.level
       self.decrementLevels(nLevels)
-      pendingBad = m.adjustToFitTreasureList(visibleTreasure, hiddenTreasures)
+      pendingBad = m.adjustToFitTreasureList(@visibleTreasure, @hiddenTreasures)
       setPendingBadConsequence(pendingBad)
     end
     
@@ -277,7 +277,7 @@ module Napakalaki
     end
     
     def giveMeATreasure()
-      #todo
+      return @hiddenTreasures[ 1 + rand(@hiddenTreasures.size-1)]
     end
     
     def canYouGiveMeATreasure()
