@@ -12,7 +12,7 @@ module Napakalaki
     end
 
     def to_s
-        return " Nombre: #{@name}, Tipo: #{@type}, Monedas: #{@goldCoins}, MaxBonus: #{@maxBonus}, MinBonus: #{@minBonus} "
+        "Nombre: #{@name}, Tipo: #{@type}, Monedas: #{@goldCoins}, MaxBonus: #{@maxBonus}, MinBonus: #{@minBonus}"
     end
   end
 end

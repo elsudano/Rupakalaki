@@ -1,6 +1,3 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
 module Napakalaki
   require_relative 'treasure_kind'
   require_relative 'treasure'
@@ -92,7 +89,7 @@ module Napakalaki
       
     def substractVisibleTreasure(t)
       
-     if(@specificVisibleTreasures.include?(t.getType))  
+      if(@specificVisibleTreasures.include?(t.getType))  
         @specificVisibleTreasures = @specificVisibleTreasures - [t.getType] 
         @nVisibleTreasures = @nVisibleTreasures - 1 
       elsif(@specificVisibleTreasures.empty? and @nVisibleTreasures > 0) 
@@ -101,21 +98,18 @@ module Napakalaki
     end
   
   
-  def substractHiddenTreasure(t)
-    if(@specificHiddenTreasures.include?(t.getType)) 
+    def substractHiddenTreasure(t)
+      if(@specificHiddenTreasures.include?(t.getType)) 
         @specificHiddenTreasures = @specificHiddenTreasures - [t.getType] 
         @nHiddenTreasures = @nHiddenTreasures - 1  
-    elsif(@specificHiddenTreasures.empty? and @nHiddenTreasures > 0) 
+      elsif(@specificHiddenTreasures.empty? and @nHiddenTreasures > 0) 
         @nHiddenTreasures = @nHiddenTreasures - 1  
-    end 
+      end 
 
-  end
+    end
 
     def to_s
       "Texto: #{@text}, Niveles: #{@levels}, Numero de tesoros Visibles: #{@nVisibleTreasures}, Numero de tesoros Ocultos: #{@nHiddenTreasures}, Muerte: #{@death}, Tesoros Ocultos: #{@specificHiddenTreasures}, Tesoros Visibles: #{@specificVisibleTreasures}."
     end
-    #private :text, :levels, :nVisibleTreasures, :nHiddenTreasures, :death, :specificHiddenTreasures, :specificVisibleTreasures
-    private_class_method:new
- 
   end
 end

@@ -1,6 +1,3 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
 module Napakalaki
 
   require_relative 'monster'
@@ -14,9 +11,9 @@ module Napakalaki
   @tesorosVisibles2 = Array.new
   @tesorosOcultos2 = Array.new
   
-  @myCardDealer = CardDealer.new
-  puts "Card: " + @myCard_Dealer.nextMonster()
-  
+  my_card_dealer = CardDealer.instance
+  my_card_dealer.initCards("f")
+  puts "Monstruo: " + my_card_dealer.nextMonster
   
   @tesorosVisibles = "ARMOR"
   @tesorosOcultos = "ONEHAND"

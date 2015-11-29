@@ -1,14 +1,18 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
-
 module Napakalaki
   class TreasureKind
-      ARMOR = :armor
-      ONEHAND = :onehand
-      BOTHHAND = :bothhands
-      HELMET = :hemlet
-      SHOES = :shoes
-     # NECKLACE = "NECKLACE"
+    ARMOR = :ARMOR
+    ONEHAND = :ONEHAND
+    BOTHHANDS = :BOTHHANDS
+    HELMET = :HELMET
+    SHOES = :SHOES
+    # NECKLACE = :NECKLACE
   end
+=begin
+ARMOR=0
+ONEHAND=1
+BOTHHANDS=2
+HELMET=3
+SHOES=4
+NECKLACE=5
+=end
 end
