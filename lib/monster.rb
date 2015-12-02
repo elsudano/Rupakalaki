@@ -1,4 +1,4 @@
-module Napakalaki
+module NapakalakiGame
 
   require_relative 'bad_consequence'
   require_relative 'prize'
@@ -12,7 +12,7 @@ module Napakalaki
       @badConsequence=b
       @prize=p
     end
-
+    
     def getLevelsGained()
       @prize.level
     end

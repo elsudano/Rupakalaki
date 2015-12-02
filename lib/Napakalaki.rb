@@ -1,4 +1,4 @@
-module Napakalaki
+module NapakalakiGame
   require 'singleton'
   require_relative 'card_dealer'
   require_relative 'player'
@@ -48,12 +48,11 @@ module Napakalaki
     end
   
     def nextTurnAllowed()
-      if @currentPlayer == nil then
+      if (@currentPlayer == nil)
         allowed = true 
       else
         allowed = @currentPlayer.validState()
       end
-
       return allowed
     end
   
@@ -91,17 +90,18 @@ module Napakalaki
   
     def initGame(players)
       initPlayers(players)
-      @dealer.initCards
+      setEnemies()
+      @dealer.initCards()
       nextTurn()
     end
   
     def nextTurn()
       stateOK = nextTurnAllowed()
-      if stateOK then
+      if (stateOK)
         @currentMonster = @dealer.nextMonster()
         @currentPlayer = nextPlayer()
         dead = @currentPlayer.isDead() 
-        if dead then
+        if (dead)
           @currentPlayer.initTreasures() 
         end
       end

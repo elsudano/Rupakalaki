@@ -1,4 +1,4 @@
-module Napakalaki
+module NapakalakiGame
   require_relative 'treasure_kind'
   require_relative 'treasure'
 
@@ -34,15 +34,16 @@ module Napakalaki
     
     def isEmpty()
       empty = false
-      if @levels == 0 && @death == false && @nHiddenTreasures == 0 && @nVisibleTreasures == 0  && @specificHiddenTreasures.empty? && @specificVisibleTreasures.empty? then
+      if @death == false && @nVisibleTreasures == 0 && @nHiddenTreasures == 0  && @specificHiddenTreasures.size() == 0 && @specificVisibleTreasures.size() == 0
         empty = true
       end
       return empty
     end
     
     def substractVisibleTreasure(t)
-      if(@specificVisibleTreasures.include?(t.getType))  
-        @specificVisibleTreasures = @specificVisibleTreasures - [t.getType] 
+      puts "#{@specificVisibleTreasures.to_s}"
+      if(@specificVisibleTreasures.include?(t))  
+        @specificVisibleTreasures = @specificVisibleTreasures.delete(t) 
         @nVisibleTreasures = @nVisibleTreasures - 1 
       elsif(@specificVisibleTreasures.empty? and @nVisibleTreasures > 0) 
         @nVisibleTreasures = @nVisibleTreasures - 1 
@@ -50,66 +51,55 @@ module Napakalaki
     end
     
     def substractHiddenTreasure(t)
-      if(@specificHiddenTreasures.include?(t.getType)) 
-        @specificHiddenTreasures = @specificHiddenTreasures - [t.getType] 
+      if(@specificHiddenTreasures.include?(t)) 
+        @specificHiddenTreasures = @specificHiddenTreasures.delete(t) 
         @nHiddenTreasures = @nHiddenTreasures - 1  
       elsif(@specificHiddenTreasures.empty? and @nHiddenTreasures > 0) 
         @nHiddenTreasures = @nHiddenTreasures - 1  
       end 
     end
     
-    def adjustToFitTreasureLists(v,h)
-      if (@specificVisibleTreasures.empty? and @specificHiddenTreasures.empty?) 
-        nVTreasures = [v.size, @nVisibleTreasures].min 
-        nHTreasures = [h.size, @nHiddenTreasures].min 
- 
-        puts"Arriba#{nHTreasures}"
-        return BadConsequence.newLevelNumberOfTreasures(@text, 0, nVTreasures, nHTreasures) 
-      else 
-        visibleKind = v.collect{|t| t.type} 
-        hiddenKind = h.collect{|t| t.type} 
-
-        listVisibleTreasureKind = [] 
-        listHiddenTreasureKind = [] 
-
-        TreasureKind.constants.each do |tKind| 
-          listVisibleTreasureKind = listVisibleTreasureKind +  
-            [tKind]*[visibleKind.select{|t| t == tKind}.size, @specificVisibleTreasures.select{|t| t == tKind}.size].min 
-          listHiddenTreasureKind = listHiddenTreasureKind +  
-            [tKind]*[hiddenKind.select{|t| t == tKind}.size, @specificHiddenTreasures.select{|t| t == tKind}.size].min 
-        end 
-
-        return BadConsequence.newLevelSpecificTreasures(@text, 0, listVisibleTreasureKind, listHiddenTreasureKind) 
-      end  
+    def adjustToFitTreasureList(v,h)
+      t_visible = Array.new
+      t_hidden = Array.new
+      puts "#{v.to_s} #{h.to_s}"
+      if (!v.empty? && !h.empty?)
+        puts "mensaje bad_consequence.rb::adjustToFitTreasureList::los arrays tienen datos"
+        v.each do |t|
+          @specificVisibleTreasures.each do |tk|
+            if (t.type == tk)
+              t_visible << tk
+            end
+          end
+        end
+        h.each do |t|
+          @specificHiddenTreasures.each do |tk|
+            if (t.type == tk)
+              t_hidden << tk
+            end
+          end
+        end
+        if (@nVisibleTreasures >= @specificVisibleTreasures.size())
+          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros visibles"
+          @nVisibleTreasures = @nVisibleTreasures - @specificVisibleTreasures.size()
+        end
+        if (@nHiddenTreasures >= @specificHiddenTreasures.size())
+          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros ocultos"
+          @nHiddenTreasures = @nHiddenTreasures - @specificHiddenTreasures.size()
+        end
+        bs = BadConsequence.new(@text, @levels, @nVisibleTreasures, @nHiddenTreasures, t_visible, t_hidden, @death)
+      else
+        bs = BadConsequence.new(@text, @levels, 0, 0, t_visible, t_hidden, @death)
+      end
+      bs
     end
     
     def myBadConsequenceIsDeath()
       return @death
     end
       
-    def substractVisibleTreasure(t)
-      
-      if(@specificVisibleTreasures.include?(t.getType))  
-        @specificVisibleTreasures = @specificVisibleTreasures - [t.getType] 
-        @nVisibleTreasures = @nVisibleTreasures - 1 
-      elsif(@specificVisibleTreasures.empty? and @nVisibleTreasures > 0) 
-        @nVisibleTreasures = @nVisibleTreasures - 1 
-      end  
-    end
-  
-  
-    def substractHiddenTreasure(t)
-      if(@specificHiddenTreasures.include?(t.getType)) 
-        @specificHiddenTreasures = @specificHiddenTreasures - [t.getType] 
-        @nHiddenTreasures = @nHiddenTreasures - 1  
-      elsif(@specificHiddenTreasures.empty? and @nHiddenTreasures > 0) 
-        @nHiddenTreasures = @nHiddenTreasures - 1  
-      end 
-
-    end
-
     def to_s
-      "Texto: #{@text}, Niveles: #{@levels}, Numero de tesoros Visibles: #{@nVisibleTreasures}, Numero de tesoros Ocultos: #{@nHiddenTreasures}, Muerte: #{@death}, Tesoros Ocultos: #{@specificHiddenTreasures}, Tesoros Visibles: #{@specificVisibleTreasures}."
+      "Texto: #{@text}, Niveles: #{@levels}, Numero de tesoros Visibles: #{@nVisibleTreasures}, Numero de tesoros Ocultos: #{@nHiddenTreasures}, Muerte: #{@death}, Tesoros Ocultos: #{@specificHiddenTreasures.to_s}, Tesoros Visibles: #{@specificVisibleTreasures.to_s}."
     end
   end
 end

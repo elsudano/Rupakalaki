@@ -1,4 +1,4 @@
-module Napakalaki
+module NapakalakiGame
   
   class Superpower
     

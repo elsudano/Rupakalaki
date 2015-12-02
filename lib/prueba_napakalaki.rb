@@ -1,4 +1,4 @@
-module Napakalaki
+module NapakalakiGame
 
   require_relative 'monster'
   require_relative 'prize'

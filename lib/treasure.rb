@@ -1,4 +1,4 @@
-module Napakalaki
+module NapakalakiGame
   class Treasure
 
     attr_reader :name, :goldCoins, :minBonus, :maxBonus, :type

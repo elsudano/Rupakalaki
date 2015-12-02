@@ -1,4 +1,4 @@
-module Napakalaki
+module NapakalakiGame
   require 'singleton'
   require_relative 'treasure_kind'
   require_relative 'treasure'
@@ -44,7 +44,7 @@ module Napakalaki
         tesorosVisibles = columnas[8].split("-")
         tesorosOcultos = columnas[9].split("-")
         miBadConsequence = BadConsequence.new(columnas[4], columnas[5].to_i, columnas[6].to_i, columnas[7].to_i, tesorosVisibles, tesorosOcultos, columnas[10])
-        @unusedMonsters.push(Monster.new(columnas[0].to_i, columnas[1].to_i, miBadConsequence, miPrice))
+        @unusedMonsters.push(Monster.new(columnas[0], columnas[1].to_i, miBadConsequence, miPrice))
       end
       fd.close
 #      @unusedMonsters.each do |m| 
