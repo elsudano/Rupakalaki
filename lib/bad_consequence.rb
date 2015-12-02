@@ -62,8 +62,7 @@ module NapakalakiGame
     def adjustToFitTreasureList(v,h)
       t_visible = Array.new
       t_hidden = Array.new
-      puts "#{v.to_s} #{h.to_s}"
-      if (!v.empty? && !h.empty?)
+      if (!v.empty? || !h.empty?)
         puts "mensaje bad_consequence.rb::adjustToFitTreasureList::los arrays tienen datos"
         v.each do |t|
           @specificVisibleTreasures.each do |tk|
@@ -79,15 +78,19 @@ module NapakalakiGame
             end
           end
         end
-        if (@nVisibleTreasures >= @specificVisibleTreasures.size())
+        if (@nVisibleTreasures >= v.size())
           puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros visibles"
-          @nVisibleTreasures = @nVisibleTreasures - @specificVisibleTreasures.size()
+          numvisibles = v.size()
+        else
+          numvisibles = v.size() - @nVisibleTreasures
         end
-        if (@nHiddenTreasures >= @specificHiddenTreasures.size())
+        if (@nHiddenTreasures >= h.size())
           puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros ocultos"
-          @nHiddenTreasures = @nHiddenTreasures - @specificHiddenTreasures.size()
+          numocultos = h.size()
+        else
+          numocultos = h.size() - @nHiddenTreasures
         end
-        bs = BadConsequence.new(@text, @levels, @nVisibleTreasures, @nHiddenTreasures, t_visible, t_hidden, @death)
+        bs = BadConsequence.new(@text, @levels, numvisibles, numocultos, t_visible, t_hidden, @death)
       else
         bs = BadConsequence.new(@text, @levels, 0, 0, t_visible, t_hidden, @death)
       end
