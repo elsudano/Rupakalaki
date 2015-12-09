@@ -134,11 +134,11 @@ module NapakalakiGame
     end
 
     def combat (m)
-      myLevel = self.level
+      myLevel = getCombatLevel()
       monsterLevel = m.combatLevel
       if myLevel>monsterLevel
         applyPrize(m)
-        if (self.level >= @@MAX_LEVEL) #@TODO Verificar que el getCombatLevel esta bien implementado
+        if (@level >= @@MAX_LEVEL) #@TODO Verificar que el getCombatLevel esta bien implementado
           combatResult = CombatResult::WINGAME
         else 
           combatResult = CombatResult::WIN
@@ -170,7 +170,7 @@ module NapakalakiGame
       badConsequence = m.badConsequence
       nLevels = badConsequence.levels
       decrementLevels(nLevels)
-      puts badConsequence.to_s
+      #puts badConsequence.to_s
       pendingBad = m.badConsequence.adjustToFitTreasureList(@visibleTreasures, @hiddenTreasures)
       setPendingBadConsequence(pendingBad)
     end
@@ -332,10 +332,10 @@ module NapakalakiGame
       auxv = Array.new(@visibleTreasures);
       auxh = Array.new(@hiddenTreasures);
       auxv.each do |t|
-        discardVisibleTreasure(tesoro);
+        discardVisibleTreasure(t);
       end
       auxh.each do |t|
-        discardHiddenTreasure(tesoro);
+        discardHiddenTreasure(t);
       end
     end
     

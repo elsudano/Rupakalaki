@@ -8,10 +8,7 @@ module NapakalakiGame
     
     @@MAXTREASURES=10
     
-    def initialize(aText, someLevels=0, someVisibleTreasures=0, someHiddenTreasures=0, 
-        someSpecificVisibleTreasures=Array.new, someSpecificHiddenTreasures=Array.new,
-        death=false)
-
+    def initialize(aText, someLevels=0, someVisibleTreasures=0, someHiddenTreasures=0, someSpecificVisibleTreasures=Array.new, someSpecificHiddenTreasures=Array.new, death=false)
       @text=aText
       @levels=someLevels
       @nVisibleTreasures=someVisibleTreasures
@@ -34,7 +31,7 @@ module NapakalakiGame
     
     def isEmpty()
       empty = false
-      if @death == false && @nVisibleTreasures == 0 && @nHiddenTreasures == 0  && @specificHiddenTreasures.size() == 0 && @specificVisibleTreasures.size() == 0
+      if @nVisibleTreasures == 0 && @nHiddenTreasures == 0  && @specificHiddenTreasures.size() == 0 && @specificVisibleTreasures.size() == 0
         empty = true
       end
       return empty
@@ -62,8 +59,8 @@ module NapakalakiGame
     def adjustToFitTreasureList(v,h)
       t_visible = Array.new
       t_hidden = Array.new
-      monsterV=@specificVisibleTreasures
-      monsterH=@specificHiddenTreasures
+      monsterV=@specificVisibleTreasures.clone
+      monsterH=@specificHiddenTreasures.clone
       if (!v.empty? || !h.empty?)
         puts "mensaje bad_consequence.rb::adjustToFitTreasureList::los arrays tienen datos"
         v.each do |t|
@@ -71,6 +68,7 @@ module NapakalakiGame
             if (t.type == tk)
               t_visible << tk 
               monsterV.delete(tk) #aqui quito el objeto seleccionado para que no vuelva a verificarlo ademas uso otra lista monterV para no machacar la original
+              tk = monsterV.index(0)
               v.next# aqui hago un next para que pase al siguiente elemento . lo mismo en hidden 
             end
           end
@@ -80,21 +78,24 @@ module NapakalakiGame
             if (t.type == tk)
               t_hidden << tk
               monsterH.delete(tk)
+              tk = monsterH.index(0)
               h.next
             end
           end
         end
-        if (@nVisibleTreasures >= v.size())
+        if (@nVisibleTreasures > v.size())
           puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros visibles"
           numvisibles = v.size()
         else
-          numvisibles = v.size() - @nVisibleTreasures
+          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::entra en el else de visibles"
+          numvisibles = @nVisibleTreasures
         end
-        if (@nHiddenTreasures >= h.size())
+        if (@nHiddenTreasures > h.size())
           puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros ocultos"
           numocultos = h.size()
         else
-          numocultos = h.size() - @nHiddenTreasures
+          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::entra en el else de ocultos"
+          numocultos = @nHiddenTreasures
         end
         bs = BadConsequence.new(@text, @levels, numvisibles, numocultos, t_visible, t_hidden, @death)
       else
