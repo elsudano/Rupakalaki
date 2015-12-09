@@ -62,19 +62,25 @@ module NapakalakiGame
     def adjustToFitTreasureList(v,h)
       t_visible = Array.new
       t_hidden = Array.new
+      monsterV=@specificVisibleTreasures
+      monsterH=@specificHiddenTreasures
       if (!v.empty? || !h.empty?)
         puts "mensaje bad_consequence.rb::adjustToFitTreasureList::los arrays tienen datos"
         v.each do |t|
-          @specificVisibleTreasures.each do |tk|
+          monsterV.each do |tk|
             if (t.type == tk)
-              t_visible << tk
+              t_visible << tk 
+              monsterV.delete(tk) #aqui quito el objeto seleccionado para que no vuelva a verificarlo ademas uso otra lista monterV para no machacar la original
+              v.next# aqui hago un next para que pase al siguiente elemento . lo mismo en hidden 
             end
           end
         end
         h.each do |t|
-          @specificHiddenTreasures.each do |tk|
+          monsterH.each do |tk|
             if (t.type == tk)
               t_hidden << tk
+              monsterH.delete(tk)
+              h.next
             end
           end
         end
