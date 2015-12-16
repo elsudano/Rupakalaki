@@ -145,24 +145,18 @@ module NapakalakiGame
         end
       else
         applyBadConsequence(m)
-        #        dice = Dice.instance
-        #        escape = dice.nextNumber()
-        #        if(escape < 5)
-        #          amIDead = m.kills()
-        #          if amIDead
-        #            die()
-        #            combatResult = CombatResult::LOSEANDDIE
-        #          else
-        #            bad = m.getBadStuff()
-        #            applyBadStuff(bad)
-        #            combatResult = CombatResult::LOSE
-        #          end
-        #        else
-        #          combatResult = CombatResult::LOSEANDESCAPE
-        #        end
+        # EXAMEN
+        dice = Dice.instance
+        cardealer = CardDealer.instance
+        r = dice.nextNumber()
+        if(r < 2)
+          rm = cardealer.getRandomUsedMonster()
+          if (rm != nil)
+            @currentMonster = rm
+          end
+        end
+        # FIN EXAMEN
       end
-      #      discardNecklaceIfVisible()
-
       return combatResult   
     end
 
@@ -355,7 +349,11 @@ module NapakalakiGame
       \n Combat Level: #{@combatLevel}
       \n Death: #{@dead}"
     end
-    
+ #EXAMEN   
+    def setHiddenTreasures(lista_tesoros)
+      @hiddenTreasures = lista_tesoros
+    end
+  #FIN EXMEN
     private :bringToLife, :getCombatLevel, :incrementLevels, :decrementLevels, :setPendingBadConsequence, :applyPrize, :applyBadConsequence, :canMakeTreasureVisible, :howManyTreasureVisible, :dieIfNoTreasures, :giveMeATreasure, :canYouGiveMeATreasure, :haveStolen, :die, :discardNecklaceIfVisible, :computeGoldCoinsValue, :canIBuyLevels 
     
   end
