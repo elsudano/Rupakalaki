@@ -1,3 +1,4 @@
+#ultima version
 module NapakalakiGame
   class Treasure
 

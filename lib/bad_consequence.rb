@@ -1,3 +1,4 @@
+#ultima version
 module NapakalakiGame
   require_relative 'treasure_kind'
   require_relative 'treasure'
@@ -67,7 +68,7 @@ module NapakalakiGame
           monsterV.each do |tk|
             if (t.type == tk)
               t_visible << tk 
-              monsterV.delete(tk) #aqui quito el objeto seleccionado para que no vuelva a verificarlo ademas uso otra lista monterV para no machacar la original
+              monsterV.delete(tk) #aqui. quito el objeto seleccionado para que no vuelva a verificarlo ademas uso otra lista monterV para no machacar la original
               tk = monsterV.index(0)
               v.next# aqui hago un next para que pase al siguiente elemento . lo mismo en hidden 
             end
@@ -84,17 +85,17 @@ module NapakalakiGame
           end
         end
         if (@nVisibleTreasures > v.size())
-          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros visibles"
+          #puts "mensaje bad_consequence.rb adjustToFitTreasureList comprobación de la cantidad de tesoros visibles"
           numvisibles = v.size()
         else
-          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::entra en el else de visibles"
+          #puts "mensaje bad_consequence.rb::adjustToFitTreasureList::entra en el else de visibles"
           numvisibles = @nVisibleTreasures
         end
         if (@nHiddenTreasures > h.size())
-          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros ocultos"
+          #puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros ocultos"
           numocultos = h.size()
         else
-          puts "mensaje bad_consequence.rb::adjustToFitTreasureList::entra en el else de ocultos"
+          #puts "mensaje bad_consequence.rb::adjustToFitTreasureList::entra en el else de ocultos"
           numocultos = @nHiddenTreasures
         end
         bs = BadConsequence.new(@text, @levels, numvisibles, numocultos, t_visible, t_hidden, @death)
