@@ -1,4 +1,4 @@
-#ultima version
+#ultima versio
 module NapakalakiGame
   require 'singleton'
   require_relative 'treasure_kind'

@@ -1,4 +1,4 @@
-# encoding: utf-8 v
+# encoding: utf-8
 
 module Test
 

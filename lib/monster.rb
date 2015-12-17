@@ -1,4 +1,4 @@
-#ultima version
+#ultima versio
 module NapakalakiGame
 
   require_relative 'bad_consequence'

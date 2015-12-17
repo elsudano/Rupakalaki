@@ -63,7 +63,7 @@ module NapakalakiGame
       monsterV=@specificVisibleTreasures.clone
       monsterH=@specificHiddenTreasures.clone
       if (!v.empty? || !h.empty?)
-        puts "mensaje bad_consequence.rb::adjustToFitTreasureList::los arrays tienen datos"
+        #puts "mensaje bad_consequence.rb::adjustToFitTreasureList::los arrays tienen datos"
         v.each do |t|
           monsterV.each do |tk|
             if (t.type == tk)

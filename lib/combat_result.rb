@@ -1,4 +1,4 @@
-#ultima version
+#ultima versio
 module NapakalakiGame
   class CombatResult
     WINGAME = :WINGAME
