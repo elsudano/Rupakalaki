@@ -85,7 +85,7 @@ module NapakalakiGame
           end
         end
         if (@nVisibleTreasures > v.size())
-          #puts "mensaje bad_consequence.rb::adjustToFitTreasureList::comprobación de la cantidad de tesoros visibles"
+          #puts "mensaje bad_consequence.rb adjustToFitTreasureList comprobación de la cantidad de tesoros visibles"
           numvisibles = v.size()
         else
           #puts "mensaje bad_consequence.rb::adjustToFitTreasureList::entra en el else de visibles"
