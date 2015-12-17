@@ -13,7 +13,7 @@ module NapakalakiGame
   @tesorosOcultos2 = Array.new
   
   my_card_dealer = CardDealer.instance
-  my_card_dealer.initCards("f")
+  my_card_dealer.initCards()
   puts "Monstruo: " + my_card_dealer.nextMonster
   
   @tesorosVisibles = "ARMOR"
