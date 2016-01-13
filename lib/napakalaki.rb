@@ -1,4 +1,3 @@
-#ultima versio
 module NapakalakiGame
   require 'singleton'
   require_relative 'card_dealer'
@@ -8,10 +7,14 @@ module NapakalakiGame
   class Napakalaki
     include Singleton
   
-    attr_accessor :currentPlayer, :players, :dealer, :currentMonster 
+    attr_accessor :currentPlayer, :currentMonster, :players, :dealer, :dice
 
     def initialize 
       @currentPlayer = nil
+      @currentMonster = nil
+      @players = Array.new
+      @dealer = CardDealer.instance
+      @dice = Dice.instance
     end 
     
     def getCurrentPlayer()
@@ -23,7 +26,6 @@ module NapakalakiGame
     end
     
     def initPlayers(names)
-      @dealer = CardDealer.instance
       @players = Array.new
       names.each do |s|
         @players << Player.new(s)
@@ -43,9 +45,7 @@ module NapakalakiGame
         end
 
       end
-      nextPlayer = @players.at(nextIndex)
-      @currentPlayer = nextPlayer
-      return @currentPlayer
+      return @players.at(nextIndex)
     end
   
     def nextTurnAllowed()
@@ -85,10 +85,6 @@ module NapakalakiGame
       end
     end
   
-    #  def buyLevels(visible,hidden)
-    #    return @currentPlayer.buyLevels(visible, hidden)
-    #  end
-  
     def initGame(players)
       initPlayers(players)
       setEnemies()
@@ -112,8 +108,7 @@ module NapakalakiGame
     def endOfGame(result)
       return result == CombatResult::WINGAME
     end
-  
-  
+    
     def setEnemies
       miEnemy=nextPlayer()
       for p in @players

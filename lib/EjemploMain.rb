@@ -1,5 +1,5 @@
 #ultima version
-require_relative "Napakalaki"
+require_relative "napakalaki"
 require_relative "GameTester"
 
 module NapakalakiGame

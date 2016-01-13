@@ -1,11 +1,10 @@
-#ultima versio
 module NapakalakiGame
 
   require_relative 'bad_consequence'
   require_relative 'prize'
 
   class Monster
-    attr_reader :name, :combatLevel, :prize, :badConsequence
+    attr_accessor :name, :combatLevel, :prize, :badConsequence
 
     def initialize(n, l, b, p)
       @name=n
@@ -27,7 +26,7 @@ module NapakalakiGame
     end
 
     def to_s
-      "Nombre: #{@name}, Nivel de Combate: #{@combatLevel}, Buen Rollo: {#{@prize}}, Mal Rollo: {#{@badConsequence}}"
+      return "Nombre: #{@name}\n\tNivel de Combate: #{@combatLevel}\n\tBuen Rollo:\n\t\t[#{@prize}]\n\tMal Rollo:\n\t\t[#{@badConsequence}]"
     end
 
   end

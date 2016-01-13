@@ -1,4 +1,3 @@
-#ultima versio
 module NapakalakiGame
   require 'singleton'
   

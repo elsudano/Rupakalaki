@@ -13,11 +13,19 @@ module NapakalakiGame
       @dead = true
       @name = name
       @level = @@MIN_LEVEL
-      @pendingBadConsequence = BadConsequence.new("")
+      @pendingBadConsequence
       @visibleTreasures = Array.new()
       @hiddenTreasures = Array.new()
       @enemy
       @canISteal=true
+    end
+    
+    def self.MAX_LEVEL
+      return @@MAX_LEVEL
+    end
+    
+    def self.MAX_HIDDEN_TREASURES
+      return @@MAX_HIDDEN_TREASURES
     end
     
     def Player.newPlayer(p)
@@ -117,7 +125,7 @@ module NapakalakiGame
     end
 
     def canIBuyLevels(l)
-      return @level + l < MAX_LEVEL
+      return @level + l < @@MAX_LEVEL
     end
 
     def applyPrize(m)
@@ -146,17 +154,6 @@ module NapakalakiGame
         end
       else
         applyBadConsequence(m)
-        # EXAMEN
-        dice = Dice.instance
-        cardealer = CardDealer.instance
-        r = dice.nextNumber()
-        if(r < 2)
-          rm = cardealer.getRandomUsedMonster()
-          if (rm != nil)
-            @currentMonster = rm
-          end
-        end
-        # FIN EXAMEN
       end
       return combatResult   
     end
@@ -233,7 +230,6 @@ module NapakalakiGame
       @visibleTreasures.delete(t)
       if(pendingBadConsequence!=nil && !pendingBadConsequence.isEmpty())
         pendingBadConsequence.substractVisibleTreasure(t)
-
       end
       dieIfNoTreasures()
     end
@@ -270,7 +266,13 @@ module NapakalakiGame
     end
 
     def validState()
-      return @pendingBadConsequence.isEmpty() && @hiddenTreasures.size() <= @@MAX_HIDDEN_TREASURES  
+      bcaux = true
+      # esto lo pongo asi por que ruby no es igual que java y comprueba todas
+      # las opciones de un if, y cuando no hay un pendingBC falla
+      if (@pendingBadConsequence != nil) then
+        bcaux = @pendingBadConsequence.isEmpty()
+      end
+      return @hiddenTreasures.size() <= @@MAX_HIDDEN_TREASURES && bcaux
     end
 
     def hasVisibleTreasures()
@@ -316,7 +318,7 @@ module NapakalakiGame
     end
     
     def canYouGiveMeATreasure()
-      return (!@visibleTreasures.isEmpty() ||  !@hiddenTreasures.isEmpty() )
+      return (!@visibleTreasures.empty? ||  !@hiddenTreasures.empty? )
     end
     
     def haveStolen()
@@ -335,27 +337,22 @@ module NapakalakiGame
     end
     
     def to_s
-      ret = "Name: #{@name}
-      \n Level: #{@level}
-      \n Enemy: #{@enemy.name}
-      \n Visible Treasures:"
+      ret = "Name: #{@name}\nLevel: #{@level}\nEnemy: #{@enemy.name}\nVisible Treasures:\n\t{"
       @visibleTreasures.each do |t|
         ret += t.type + " "
       end    
-      ret += "\n Hidden Treasures:"
+      ret += "}\nHidden Treasures:\n\t{"
       @hiddenTreasures.each do |t|
         ret += t.type + " "
       end
-      ret += "\n Pending BadStuff: #{@pendingBadConsequence.to_s}
-      \n Combat Level: #{@combatLevel}
-      \n Death: #{@dead}"
+      ret += "}"
+      if (@pendingBadConsequence != nil) then
+        ret += "\nPending BadStuff: #{@pendingBadConsequence.to_s}\nCombat Level: #{@combatLevel}\nDeath: #{@dead}"
+      end
+      return ret
     end
- #EXAMEN   
-    def setHiddenTreasures(lista_tesoros)
-      @hiddenTreasures = lista_tesoros
-    end
-  #FIN EXMEN
-    private :bringToLife, :getCombatLevel, :incrementLevels, :decrementLevels, :setPendingBadConsequence, :applyPrize, :applyBadConsequence, :canMakeTreasureVisible, :howManyTreasureVisible, :dieIfNoTreasures, :giveMeATreasure, :canYouGiveMeATreasure, :haveStolen, :die, :discardNecklaceIfVisible, :computeGoldCoinsValue, :canIBuyLevels 
+
+    private :bringToLife, :getCombatLevel, :incrementLevels, :decrementLevels, :setPendingBadConsequence, :applyPrize, :applyBadConsequence, :canMakeTreasureVisible, :howManyTreasureVisible, :dieIfNoTreasures, :haveStolen, :die, :discardNecklaceIfVisible, :computeGoldCoinsValue, :canIBuyLevels 
     
   end
 end
