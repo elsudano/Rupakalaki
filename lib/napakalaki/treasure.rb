@@ -1,8 +1,8 @@
-#ultima versio
 module NapakalakiGame
+  
   class Treasure
 
-    attr_reader :name, :goldCoins, :minBonus, :maxBonus, :type
+    attr_accessor :name, :goldCoins, :minBonus, :maxBonus, :type
 
     def initialize(n,g,min,max,t)
       @name=n

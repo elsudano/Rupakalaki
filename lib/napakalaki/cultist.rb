@@ -1,5 +1,5 @@
 module NapakalakiGame
-  
+
   class Cultist
     attr_accessor :name, :gainedLevels
     

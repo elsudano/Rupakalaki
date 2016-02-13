@@ -1,5 +1,4 @@
 module NapakalakiGame
-
   require_relative 'bad_consequence'
   require_relative 'prize'
 

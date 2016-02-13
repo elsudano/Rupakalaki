@@ -1,7 +1,13 @@
 module NapakalakiGame
+#  require 'pry'
   require_relative 'treasure_kind'
   require_relative 'treasure'
 
+  #
+  # @abstract Esta clase es la encargada del mal rollo que tienen los monstruos
+  # pero tambien se encarga de pasar el mal rollo pendiente al jugador cuando
+  # pierde un combate po lo tanto 
+  #
   class BadConsequence
 
     @@MAXTREASURES=10

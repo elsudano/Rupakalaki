@@ -1,4 +1,4 @@
-Angeles de la noche ibicenca,14,4,1,Te atrapan para llevarte de fiesta y te dejan caer en mitad del vuelo. Descarta 1 mano visible y 1 mano oculta,0,0,0,ONEHAND-,ONEHAND-,false,0
+Angeles de la noche ibicenca,14,4,1,Te atrapan para llevarte de fiesta. Descarta 1 mano visible y 1 mano oculta,0,0,0,ONEHAND-,ONEHAND-,false,0
 Bicefalo,20,1,1,Te faltan manos para tanta cabeza. Pierdes 3 niveles y tus tesoros visibles de las manos,3,10,0,,,false,0
 El Espia,5,1,1,Te asusta en la noche. Pierdes un casco visible,0,0,0,HELMET-,,false,0
 El Gorron en el umbral,10,3,1,Pierdes todos tus tesoros visibles,0,10,0,,,false,0

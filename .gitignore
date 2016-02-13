@@ -1,1 +1,7 @@
-/nbproject/private/
+.gitignore
+/nbproject/
+LICENSE
+Rakefile
+/doc/
+.yardoc/
+/pkg/

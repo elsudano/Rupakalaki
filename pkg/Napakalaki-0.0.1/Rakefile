@@ -1,9 +1,3 @@
-# 
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
- 
-
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
@@ -11,6 +5,7 @@ require 'rubygems/package_task'
 require 'rdoc/task'
 require 'rake/testtask'
 require 'rspec/core/rake_task'
+require 'yard'
 
 spec = Gem::Specification.new do |s|
   s.name = 'Napakalaki'
@@ -19,8 +14,8 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README', 'LICENSE']
   s.summary = 'Your summary here'
   s.description = s.summary
-  s.author = ''
-  s.email = ''
+  s.author = 'Carlos de la Torre'
+  s.email = 'cwebtecnico@gmail.com'
   # s.executables = ['your_executable_here']
   s.files = %w(LICENSE README Rakefile) + Dir.glob("{bin,lib,spec}/**/*")
   s.require_path = "lib"
@@ -37,9 +32,15 @@ Rake::RDocTask.new do |rdoc|
   files =['README', 'LICENSE', 'lib/**/*.rb']
   rdoc.rdoc_files.add(files)
   rdoc.main = "README" # page to start on
-  rdoc.title = "Napakalaki Docs"
-  rdoc.rdoc_dir = 'doc/rdoc' # rdoc output folder
-  rdoc.options << '--line-numbers'
+  rdoc.title = "Documentacion de Napakalaki"
+  rdoc.rdoc_dir = 'doc' # rdoc output folder
+  rdoc.options << '--line-numbers --all'
+end
+
+YARD::Rake::YardocTask.new do |t|
+  t.files   = ['lib/**/*.rb']
+  t.options = ['--private', '--protected']
+  t.stats_options = ['--list-undoc']
 end
 
 Rake::TestTask.new do |t|

@@ -1,5 +1,5 @@
-#ultima versio
 module NapakalakiGame
+  #  require 'pry'
   require_relative 'dice'
   
   class Player
@@ -20,6 +20,10 @@ module NapakalakiGame
       @canISteal=true
     end
     
+    def self.MIN_LEVEL
+      return @@MIN_LEVEL
+    end
+    
     def self.MAX_LEVEL
       return @@MAX_LEVEL
     end
@@ -29,37 +33,23 @@ module NapakalakiGame
     end
     
     def Player.newPlayer(p)
-      new(p.dead,p.name,p.level,p.pendingBadConsequence,p.visibleTreasures,p.hiddenTreasures)
+      return new(p.dead,p.name,p.level,p.pendingBadConsequence,p.visibleTreasures,p.hiddenTreasures)
     end
     
     def getName()
-      @name
+      return @name
     end
     
     def getVisibleTreasures()
-      @visibleTreasures
+      return @visibleTreasures
     end
     
     def getHiddenTreasures()
-      @hiddenTreasures
+      return @hiddenTreasures
     end
     
     def getCombatLevel() 
       lvl = @level
-      #hasNecklace = false 
-      #      @visibleTreasures.each do |t| 
-      #        if t.type == TreasureKind::NECKLACE then 
-      #          hasNecklace = true 
-      #          break 
-      #        end 
-      #      end 
-      #      @visibleTreasures.each do |t| 
-      #        if hasNecklace then 
-      #          lvl += t.maxBonus 
-      #        else  
-      #          lvl += t.minBonus  
-      #        end 
-      #      end 
       @visibleTreasures.each do |t| 
         lvl+=t.minBonus+t.maxBonus
       end 
@@ -129,6 +119,7 @@ module NapakalakiGame
     end
 
     def applyPrize(m)
+      binding.pry if $DEBUGMODE
       nLevels = m.getLevelsGained()
       incrementLevels(nLevels)
       nTreasures = m.getTreasuresGained()
@@ -140,9 +131,11 @@ module NapakalakiGame
           @hiddenTreasures.push(treasure)
         end
       end
+      binding.pry if $DEBUGMODE
     end
 
     def combat (m)
+      binding.pry if $DEBUGMODE
       myLevel = getCombatLevel()
       monsterLevel = m.combatLevel
       if myLevel>monsterLevel
@@ -154,11 +147,18 @@ module NapakalakiGame
         end
       else
         applyBadConsequence(m)
+        if (shouldConvert) 
+          combatResult = CombatResult::LOSEANDCONVERT
+        else 
+          combatResult = CombatResult::LOSE
+        end
       end
+      binding.pry if $DEBUGMODE
       return combatResult   
     end
 
     def applyBadConsequence(m)
+      binding.pry if $DEBUGMODE
       badConsequence = m.badConsequence
       nLevels = badConsequence.levels
       decrementLevels(nLevels)
@@ -180,6 +180,7 @@ module NapakalakiGame
     end
 
     def canMakeTreasureVisible(t)
+      binding.pry if $DEBUGMODE
       result = true
       cont = 0
       case t.type.to_s
@@ -214,6 +215,7 @@ module NapakalakiGame
           end
         end
       end
+      binding.pry if $DEBUGMODE
       return result
     end
 
@@ -227,19 +229,23 @@ module NapakalakiGame
     end
     
     def discardVisibleTreasure(t)
+      binding.pry if $DEBUGMODE
       @visibleTreasures.delete(t)
       if(pendingBadConsequence!=nil && !pendingBadConsequence.isEmpty())
         pendingBadConsequence.substractVisibleTreasure(t)
       end
       dieIfNoTreasures()
+      binding.pry if $DEBUGMODE
     end
 
     def discardHiddenTreasure(t)
+      binding.pry if $DEBUGMODE
       @hiddenTreasures.delete(t)
       if(pendingBadConsequence!=nil && !pendingBadConsequence.isEmpty())
         pendingBadConsequence.substractHiddenTreasure(t)
       end    
       dieIfNoTreasures()
+      binding.pry if $DEBUGMODE
     end
 
     def buyLevels(visible = Array.new, hidden = Array.new)
@@ -266,6 +272,7 @@ module NapakalakiGame
     end
 
     def validState()
+      binding.pry if $DEBUGMODE
       bcaux = true
       # esto lo pongo asi por que ruby no es igual que java y comprueba todas
       # las opciones de un if, y cuando no hay un pendingBC falla
@@ -273,6 +280,7 @@ module NapakalakiGame
         bcaux = @pendingBadConsequence.isEmpty()
       end
       return @hiddenTreasures.size() <= @@MAX_HIDDEN_TREASURES && bcaux
+      binding.pry if $DEBUGMODE
     end
 
     def hasVisibleTreasures()
@@ -306,7 +314,7 @@ module NapakalakiGame
         @hiddenTreasures.add(treasure)
         haveStolen()
       end
-      treasure
+      return treasure
     end
     
     def setEnemy(enemy)
@@ -326,6 +334,7 @@ module NapakalakiGame
     end
     
     def discardAllTreasures()
+      binding.pry if $DEBUGMODE
       auxv = Array.new(@visibleTreasures);
       auxh = Array.new(@hiddenTreasures);
       auxv.each do |t|
@@ -334,6 +343,7 @@ module NapakalakiGame
       auxh.each do |t|
         discardHiddenTreasure(t);
       end
+      binding.pry if $DEBUGMODE
     end
     
     def to_s
@@ -352,7 +362,12 @@ module NapakalakiGame
       return ret
     end
 
-    private :bringToLife, :getCombatLevel, :incrementLevels, :decrementLevels, :setPendingBadConsequence, :applyPrize, :applyBadConsequence, :canMakeTreasureVisible, :howManyTreasureVisible, :dieIfNoTreasures, :haveStolen, :die, :discardNecklaceIfVisible, :computeGoldCoinsValue, :canIBuyLevels 
+    def shouldConvert
+      dice = Dice.instance
+      return dice.nextNumber() == 1;
+    end
+    
+    private :bringToLife, :getCombatLevel, :incrementLevels, :decrementLevels, :setPendingBadConsequence, :applyPrize, :applyBadConsequence, :canMakeTreasureVisible, :howManyTreasureVisible, :dieIfNoTreasures, :haveStolen, :die, :discardNecklaceIfVisible, :computeGoldCoinsValue, :canIBuyLevels, :shouldConvert 
     
   end
 end

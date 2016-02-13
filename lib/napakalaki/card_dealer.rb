@@ -1,4 +1,5 @@
 module NapakalakiGame
+  #  require 'pry'
   require 'singleton'
   require_relative 'treasure_kind'
   require_relative 'treasure'
@@ -14,15 +15,16 @@ module NapakalakiGame
     include Singleton
     attr_accessor :usedMonsters, :unusedMonsters, :usedTreasures, :unusedTreasures, :usedCultists, :unusedCultists
     # 
-    # Esta es una funcion que sirve para inicializar el mazo de los 
+    # Esta es una función que sirve para inicializar el mazo de los 
     # Tesoros se está intentando que se importen los tesoros
     # directamente desde un fichero de texto para que no tener que
     # crearlos todos a mano.
     #
     def initTreasureCardDeck()
+      binding.pry if $DEBUGMODE
       @unusedTreasures = Array.new
       @usedTreasures = Array.new
-      fd = File.open("./resources/base_datos_tesoros.txt", "r")
+      fd = File.open("#{$BD_TESOROS}", "r")
       fd.each_line do |line|
         columnas = line.split(",")
         @unusedTreasures.push(Treasure.new(columnas[0], columnas[4], columnas[2].to_i, columnas[3].to_i, columnas[1].upcase))
@@ -31,6 +33,7 @@ module NapakalakiGame
       #      @unusedTreasures.each do |t| 
       #        puts "Tesoro: #{t.to_s}"
       #      end
+      binding.pry if $DEBUGMODE
     end
     # 
     # Esta es una funcion que sirve para inicializar el mazo de los 
@@ -39,17 +42,20 @@ module NapakalakiGame
     # crearlos todos a mano.
     #
     def initMonsterCardDeck()
+      binding.pry if $DEBUGMODE
       @unusedMonsters = Array.new
       @usedMonsters = Array.new
-      fd = File.open("./resources/base_datos_monstruos.txt", "r")
+      fd = File.open("#{$BD_MONSTRUOS}", "r")
       fd.each_line do |line|
         columnas = line.split(",")
         miPrice = Prize.new(columnas[2], columnas[3])
         if (columnas[10] == "true") then
           miBadConsequence = DeathBadConsequence.new(columnas[4], columnas[10])
         elsif (!columnas[8].empty? || !columnas[9].empty?) then
-          tesorosVisibles = columnas[8].split("-")
-          tesorosOcultos = columnas[9].split("-")
+          #          tesorosVisibles = columnas[8].split("-")
+          #          tesorosOcultos = columnas[9].split("-")
+          tesorosVisibles = leeTesoros(columnas[8])
+          tesorosOcultos = leeTesoros(columnas[9])
           miBadConsequence = SpecificBadConsequence.new(columnas[4], columnas[5].to_i, columnas[10], tesorosVisibles, tesorosOcultos) 
         else
           miBadConsequence = NumericBadConsequence.new(columnas[4], columnas[5].to_i, columnas[10], columnas[6].to_i, columnas[7].to_i)
@@ -60,6 +66,7 @@ module NapakalakiGame
       #      @unusedMonsters.each do |m| 
       #        puts "Monstruo: #{m.to_s}"
       #      end
+      binding.pry if $DEBUGMODE
     end
     # 
     # Esta es una funcion que sirve para inicializar el mazo de los 
@@ -67,14 +74,16 @@ module NapakalakiGame
     # de texto para que no tener que crearlos todos a mano.
     #
     def initCultistCardDeck()
+      binding.pry if $DEBUGMODE
       @unusedCultists = Array.new
       @usedCultists = Array.new
-      fd = File.open("./resources/base_datos_sectarios.txt", "r")
+      fd = File.open("#{$BD_SECTARIOS}", "r")
       fd.each_line do |line|
         columnas = line.split(",")
         @unusedCultists.push(Cultist.new(columnas[0], columnas[1].to_i))
       end
       fd.close
+      binding.pry if $DEBUGMODE
     end
     
     def shuffleTreasures()
@@ -90,6 +99,7 @@ module NapakalakiGame
     end
     
     def nextTreasure()
+      binding.pry if $DEBUGMODE
       if @unusedTreasures.empty?
         @usedTreasures.each do |t| 
           @unusedTreasures<<t
@@ -100,10 +110,12 @@ module NapakalakiGame
       t = @unusedTreasures.at(0)
       @usedTreasures<<t
       @unusedTreasures.delete(t);
+      binding.pry if $DEBUGMODE
       return t
     end
   
     def nextMonster()
+      binding.pry if $DEBUGMODE
       if @unusedMonsters.empty?
         @usedMonsters.each do |m| 
           @unusedMonsters<<m
@@ -114,10 +126,12 @@ module NapakalakiGame
       m = @unusedMonsters.at(0)
       @usedMonsters<<m
       @unusedMonsters.delete(m);
+      binding.pry if $DEBUGMODE
       return m
     end
   
     def nextCultist()
+      binding.pry if $DEBUGMODE
       if @unusedCultists.empty?
         @usedCultists.each do |m| 
           @unusedCultists<<m
@@ -128,6 +142,7 @@ module NapakalakiGame
       c = @unusedCultists.at(0)
       @usedCultists<<c
       @unusedCultists.delete(c);
+      binding.pry if $DEBUGMODE
       return c
     end
     
@@ -144,14 +159,40 @@ module NapakalakiGame
     end
   
     def initCards()
+      binding.pry if $DEBUGMODE
       initTreasureCardDeck()
       shuffleTreasures()
       initMonsterCardDeck()
       shuffleMonsters()
       initCultistCardDeck()
       shuffleCultists()
+      binding.pry if $DEBUGMODE
     end
   
-    private :initMonsterCardDeck, :initTreasureCardDeck, :initCultistCardDeck, :shuffleMonsters, :shuffleTreasures, :shuffleCultists
+    def leeTesoros(cadena_tesoros)
+      cadena_tesoros = cadena_tesoros.upcase
+      cadena_tesoros = cadena_tesoros.split("-")
+      binding.pry if $DEBUGMODE
+      # estos serán del tipo Treasure Kind
+      tesoros = Array.new
+      cadena_tesoros.each do |tk|
+        case tk
+        when "ARMOR" then
+          tesoros << TreasureKind::ARMOR
+        when "ONEHAND" then
+          tesoros << TreasureKind::ONEHAND
+        when "BOTHHANDS" then
+          tesoros << TreasureKind::BOTHHANDS
+        when "HELMET" then
+          tesoros << TreasureKind::HELMET
+        when "SHOES" then
+          tesoros << TreasureKind::SHOES
+        end
+      end
+      binding.pry if $DEBUGMODE
+      return tesoros
+    end
+    
+    private :initMonsterCardDeck, :initTreasureCardDeck, :initCultistCardDeck, :shuffleMonsters, :shuffleTreasures, :shuffleCultists, :leeTesoros
   end
 end

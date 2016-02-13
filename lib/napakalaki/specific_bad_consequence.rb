@@ -1,4 +1,5 @@
 module NapakalakiGame
+#  require 'pry'
   
   class SpecificBadConsequence < BadConsequence
     
@@ -11,6 +12,7 @@ module NapakalakiGame
     end
     
     def adjustToFitTreasureList(tVisible,tHidden)
+      binding.pry if $DEBUGMODE
       bs = SpecificBadConsequence.new
       auxv = Array.new
       auxh = Array.new
@@ -41,20 +43,26 @@ module NapakalakiGame
         end
         # genero el malrollo necesario
         bs = SpecificBadConsequence.new(@text, @levels, @death, auxv, auxh)
+        binding.pry if $DEBUGMODE
       end
+      binding.pry if $DEBUGMODE
       return bs
     end
 
     def substractVisibleTreasure(treasure)
+      binding.pry if $DEBUGMODE
       if(@specificVisibleTreasures.include?(treasure))  
         @specificVisibleTreasures = @specificVisibleTreasures.delete(treasure) 
-      end  
+      end
+      binding.pry if $DEBUGMODE
     end
     
     def substractHiddenTreasure(treasure)
+      binding.pry if $DEBUGMODE
       if(@specificHiddenTreasures.include?(treasure)) 
         @specificHiddenTreasures = @specificHiddenTreasures.delete(treasure) 
-      end 
+      end
+      binding.pry if $DEBUGMODE
     end
 
     def isEmpty()

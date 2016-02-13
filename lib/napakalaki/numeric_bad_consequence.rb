@@ -1,5 +1,6 @@
 module NapakalakiGame
-  
+#  require 'pry'
+
   class NumericBadConsequence < BadConsequence
     
     attr_accessor :nVisibleTreasures, :nHiddenTreasures
@@ -11,6 +12,7 @@ module NapakalakiGame
     end
     
     def adjustToFitTreasureList(tVisible,tHidden)
+      binding.pry if $DEBUGMODE
       bs = NumericBadConsequence.new
       numvisibles = numocultos = 0
       # compruebo el tamaño de los array para ver si puedo usarlos
@@ -29,8 +31,10 @@ module NapakalakiGame
         end
         # genero un malrollo con los valores correctos
         bs = NumericBadConsequence.new(@text, @levels, @death, numvisibles, numocultos)
+        binding.pry if $DEBUGMODE
       end
       # devuelvo el malrollo que corresponda
+      binding.pry if $DEBUGMODE
       return bs
     end
     

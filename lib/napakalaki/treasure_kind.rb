@@ -1,5 +1,5 @@
-#ultima versio
 module NapakalakiGame
+  
   class TreasureKind
     ARMOR = :ARMOR
     ONEHAND = :ONEHAND
